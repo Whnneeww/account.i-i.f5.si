@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アカウントページ</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        input, button { margin: 10px 0; padding: 10px; width: 100%; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>アカウント情報</h1>
+        <h2>情報を入力してください</h2>
+        <input type="text" id="username" placeholder="ユーザー名" required />
+        <input type="text" id="userId" placeholder="ユーザーID" required />
+        <input type="url" id="userIcon" placeholder="ユーザーアイコンのURL" required />
+        <input type="email" id="email" placeholder="メールアドレス" required />
+        <button id="saveButton">保存する</button>
+
+        <h2>保存された情報</h2>
+        <pre id="savedData"></pre>
+    </div>
+
+    <script>
+        // 保存ボタンがクリックされたときの処理
+        document.getElementById('saveButton').onclick = function() {
+            const username = document.getElementById('username').value;
+            const userId = document.getElementById('userId').value;
+            const userIcon = document.getElementById('userIcon').value;
+            const email = document.getElementById('email').value;
+
+            // アカウント情報をオブジェクトとして作成
+            const accountData = {
+                username: username,
+                userId: userId,
+                userIcon: userIcon,
+                email: email
+            };
+
+            // ローカルストレージに保存
+            localStorage.setItem('account', JSON.stringify(accountData));
+
+            // 保存されたデータを更新
+            displaySavedData();
+        };
+
+        // ページが読み込まれたときに保存されたデータを表示
+        function displaySavedData() {
+            const storedData = localStorage.getItem('account');
+            if (storedData) {
+                const accountInfo = JSON.parse(storedData);
+                document.getElementById('savedData').textContent = JSON.stringify(accountInfo, null, 2);
+            } else {
+                document.getElementById('savedData').textContent = '保存された情報はありません。';
+            }
+        }
+
+        // 初回読み込み時にデータを表示
+        window.onload = displaySavedData;
+    </script>
+</body>
+</html>
