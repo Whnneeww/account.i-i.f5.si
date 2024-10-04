@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Sender</title>
+</head>
+<body>
+    <h1>情報を送信しています...</h1>
+
+    <script>
+        // URLからクエリパラメータを取得してtargetUrlを設定
+        const params = new URLSearchParams(window.location.search);
+        const targetUrl = params.get('url'); // URLパラメータから取得
+
+        // メッセージを送信
+        const sendMessage = () => {
+            const targetWindow = window.opener; // 親ウィンドウを取得
+
+            // ローカルストレージからデータを取得
+            const localStorageData = localStorage.getItem('account'); // 'account'というキーのデータを取得
+            const message = { info: JSON.parse(localStorageData) }; // JSON形式に変換
+
+            if (targetWindow && targetUrl) {
+                targetWindow.postMessage(message, targetUrl); // orzindmain.comにメッセージを送信
+            }
+
+            // 最後にリダイレクトする
+            window.location.href = targetUrl; // orzindmain.comにリダイレクト
+        };
+
+        // ウィンドウが読み込まれたらメッセージを送信
+        window.onload = sendMessage;
+    </script>
+</body>
+</html>
