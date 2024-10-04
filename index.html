@@ -7,26 +7,31 @@
 </head>
 <body>
     <h1>情報を送信しています...</h1>
-
+    
     <script>
         // URLからクエリパラメータを取得してtargetUrlを設定
         const params = new URLSearchParams(window.location.search);
         const targetUrl = params.get('url'); // URLパラメータから取得
-
+        
         // メッセージを送信
         const sendMessage = () => {
             const targetWindow = window.opener; // 親ウィンドウを取得
-
+            
             // ローカルストレージからデータを取得
             const localStorageData = localStorage.getItem('account'); // 'account'というキーのデータを取得
             const message = { info: JSON.parse(localStorageData) }; // JSON形式に変換
-
+            
             if (targetWindow && targetUrl) {
                 targetWindow.postMessage(message, targetUrl); // orzindmain.comにメッセージを送信
             }
 
-            // 最後にリダイレクトする
-            window.location.href = targetUrl; // orzindmain.comにリダイレクト
+            // リダイレクト前に短い待機時間を設ける
+            setTimeout(() => {
+                window.history.back(); // ブラウザバック処理
+            }, 10); // 2000ミリ秒（2秒）待機
+
+            // もし特定のURLにリダイレクトしたい場合は以下をコメント解除してください
+            // window.location.href = targetUrl; // orzindmain.comにリダイレクト
         };
 
         // ウィンドウが読み込まれたらメッセージを送信
